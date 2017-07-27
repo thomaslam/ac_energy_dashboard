@@ -1,0 +1,39 @@
+{% load static %}
+<div class="sidebar" data-color="purple">
+
+    <!--
+
+    Tip 1: you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple"
+    Tip 2: you can also add an image using data-image tag
+
+    -->
+
+    <div class="sidebar-wrapper">
+        <div class="logo">
+            <img src="{% static 'img/college_seal.png' %}" alt="Amherst College"  style="width:225px;">
+            {# 204px #}
+            <h3 class="title-uppercase">Amherst College Energy Dashboard</h3>
+        </div>
+
+        <ul class="nav">
+            <li class="active">
+                <a href="electricity.html">
+                    <i class="pe-7s-light"></i>
+                    <p>Electricity</p>
+                </a>
+            </li>
+            <li>
+                <a href="water.html">
+                    <i class="pe-7s-drop"></i>
+                    <p>Water</p>
+                </a>
+            </li>
+            <li>
+                <a href="gas.html">
+                    <i class="pe-7s-cloud"></i>
+                    <p>Gas</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
