@@ -41,7 +41,9 @@
     height: calc(100% - 60px);
 }
 
-#mapid { height: 500px; }
+#mapid { 
+    height: 100%; 
+}
 
 #overlay {
     width:80%;

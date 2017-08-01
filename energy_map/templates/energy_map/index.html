@@ -19,76 +19,40 @@
     {% include 'energy_map/partials/side_bar.html' %}
 
     <div class="main-panel">
-        <nav class="navbar navbar-default navbar-fixed">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">{{ energy_type }} Usage</a>
-                </div>
-                <div class="collapse navbar-collapse">
-                </div>
-            </div>
-        </nav>
+        <!-- <nav class="navbar navbar-default navbar-fixed"> -->
+            <!-- <div class="container-fluid"> -->
+                <!-- <div class="navbar-header"> -->
+                    <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2"> -->
+                        <!-- <span class="sr-only">Toggle navigation</span> -->
+                        <!-- <span class="icon-bar"></span> -->
+                        <!-- <span class="icon-bar"></span> -->
+                        <!-- <span class="icon-bar"></span> -->
+                    <!-- </button> -->
+                    <!-- <a class="navbar-brand" href="#">{{ energy_type }} Usage</a> -->
+                <!-- </div> -->
+                <!-- <div class="collapse navbar-collapse"> -->
+                <!-- </div> -->
+            <!-- </div> -->
+        <!-- </nav> -->
 
-        <!-- <div id="mask" onclick="document.location='#';"></div> -->
-        <div class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="header">
-                                <h4 class="title">Amherst College Map</h4>
-                                <p class="category">{{ energy_type }} Usage</p>
-                            </div>
-                            <div class="content">
                                 
-                                <div id="mapid"></div>
-                                <div>
-                                    Some text about energy saving tips
-                                </div>
-                                <div class="footer">
-                                    <div class="legend">
-                                        <i class="fa fa-circle text-info"></i> kWh
-                                        <i class="fa fa-circle text-danger"></i> BTU
-                                    </div>
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="fa fa-clock-o"></i>
-                                        Data updated 12 hours ago
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Overlay pops up when click on map marker -->
-                            <div id="overlay">
-                                <h4 id="overlay-text">
-                                    Energy Usage for past 24 hours
-                                </h4>
-
-                                <!-- Chartist -->
-                                <!-- <div class="ct-chart"></div> -->
-                                <canvas id="myChart"></canvas>
-                                <i class="close"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div id="mapid"></div>
+        <div class="footer">
+            <hr>
+            <div class="stats">
+                <i class="fa fa-clock-o"></i>
+                Data updated 12 hours ago
             </div>
         </div>
 
-
-        <footer class="footer">
-            <div class="container-fluid">
-                <p class="copyright pull-right">
-                    &copy; 2017 AC Office of Environmental Sustainability
-                </p>
-            </div>
-        </footer>
+        <!-- Overlay pops up when click on map marker -->
+        <div id="overlay">
+            <h4 id="overlay-text">
+                Energy Usage for past 24 hours
+            </h4>
+            <canvas id="myChart"></canvas>
+            <i class="close"></i>
+        </div>
 
     </div>
 </div>

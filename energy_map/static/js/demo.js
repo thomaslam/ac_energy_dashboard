@@ -20,30 +20,41 @@ demo = {
         // with building name as param
         
         return {
-            fillColor: getColor(feature.properties.electricity),
-            weight: 1,
-            opacity: 1,
+            // fillColor: getColor(feature.properties.electricity),
+            weight: 0,
+            opacity: 0,
             color: 'white',
-            dashArray: '3',
-            fillOpacity: 1
+            // dashArray: '3'
+            // fillOpacity: 1
         };
       }
 
+      var customIcon = L.icon({
+        iconUrl: 'https://ceed.ucdavis.edu/modules/campusHome/img/map/classroom-marker.svg',
+        iconAnchor: [5, 5],
+        iconSize: [15, 15]
+      });
 
       function onEachFeature(feature, layer) {
-        // TODO: search for electricity values by POST request
-        // with building name as param
-
         if (feature.properties && feature.properties.marker) {
-          L.marker(feature.properties.marker).
+          L.marker(feature.properties.marker, {icon: customIcon}).
             bindPopup("<b>" + feature.properties.name + "</b><br>Curr Avg: " 
             + feature.properties.electricity + " kWh<br><a href='/energy_data?bld=' class='.popupLink'>View energy usage by hour</a>").
             addTo(mymap);
+
+          L.circle(feature.properties.marker, {
+            radius: 50,
+            // opacity: 10,
+            fillOpacity: 0.7,
+            fillColor: getColor(feature.properties.electricity),
+            weight: 0
+          }).addTo(mymap);
         }
       }
 
       var roads = L.gridLayer.googleMutant({
-        type: 'roadmap' // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
+        type: 'roadmap', // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
+        attribution: '&copy; 2017 AC Office of Environmental Sustainability'
       }).addTo(mymap);
 
       L.geoJson(housingData, {
@@ -71,9 +82,9 @@ demo = {
             var overlay = $('#overlay');
             overlay.show();
 
-            $('#overlay-text').text(data['bld_name'] + " energy usage for past 24 hours")
+            $('#overlay-text').text(bldName+ " energy usage for past 24 hours")
             
-            console.log(data['bld_name']);
+            console.log(bldName);
             console.log(data['energy_data']);
 
             var myChart = new Chart($('#myChart'), {
@@ -86,7 +97,8 @@ demo = {
                   backgroundColor: '#614488',
                   borderColor: '#614488',
                   borderWidth: 3,
-                  pointStyle: 'circle'
+                  pointStyle: 'circle',
+                  tension: 0.25
                 }]
               },
               options: {
@@ -131,6 +143,9 @@ demo = {
 
             $('.close').click(function() {
               overlay.hide();
+              // Prevent hovering problem
+              $('#myChart').remove();
+              $('#overlay').append('<canvas id="myChart"></canvas>');
             })
           }})
         };
@@ -148,9 +163,8 @@ demo = {
         for (var i = 0; i < grades.length; i++) {
           div.innerHTML +=
           '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-          grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+          grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + ' kWH<br>' : '+ kWH');
         }
-
         return div;
       };
 

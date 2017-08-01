@@ -40,7 +40,6 @@ def get_energy_data(request):
 	print()
 
 	return JsonResponse({
-		'bld_name': bld_name,
 		'time_data': time_data,
 		'energy_data': energy_data
 		})
