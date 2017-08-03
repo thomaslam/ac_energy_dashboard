@@ -24,7 +24,7 @@ main = {
       });
 
       var mymap = L.map('mapid', {
-        layers: [roads, satellite, terrain, hybrid]
+        layers: [satellite, terrain, hybrid, roads]
       }).setView([42.3709104, -72.5170028], 16);
 
       L.control.layers({

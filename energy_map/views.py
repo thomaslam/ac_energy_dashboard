@@ -11,8 +11,8 @@ def index(request):
 		energy_type = 'Electricity'
 	
 	context = {
-		'energy_type': energy_type,
-		'demo_data': json.dumps([45, 21, 10, 12, 20, 25, 40, 45, 50, 60, 75, 80])
+		'page_type': 'energy_map',
+		'energy_type': energy_type
 	}
 	return render(request, 'energy_map/index.html', context)
 
@@ -44,5 +44,10 @@ def get_energy_data(request):
 		'energy_data': energy_data
 		})
 
+def contact(request):
+	context = { 'page_type': 'contact' }
+	return render(request, 'energy_map/contact.html', context)
+
 def feedback(request):
-	return render(request, 'energy_map/feedback.html', {})
+	context = { 'page_type': 'feedback'}
+	return render(request, 'energy_map/feedback.html', context)
