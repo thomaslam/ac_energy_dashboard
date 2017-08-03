@@ -1,9 +1,38 @@
 type = ['','info','success','warning','danger'];
 myUrl = "http://148.85.253.152:15675"    	
 
-demo = {
-    initLeaflet: function(housingData) {
-      var mymap = L.map('mapid').setView([42.3709104, -72.5170028], 16);
+main = {
+    init: function(housingData) {
+      var roads = L.gridLayer.googleMutant({
+        type: 'roadmap', // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
+        attribution: '&copy; 2017 AC Office of Environmental Sustainability'
+      });
+
+      var satellite = L.gridLayer.googleMutant({
+        type: 'satellite', // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
+        attribution: '&copy; 2017 AC Office of Environmental Sustainability'
+      });
+
+      var terrain = L.gridLayer.googleMutant({
+        type: 'terrain', // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
+        attribution: '&copy; 2017 AC Office of Environmental Sustainability'
+      });
+
+      var hybrid = L.gridLayer.googleMutant({
+        type: 'hybrid', // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
+        attribution: '&copy; 2017 AC Office of Environmental Sustainability'
+      });
+
+      var mymap = L.map('mapid', {
+        layers: [roads, satellite, terrain, hybrid]
+      }).setView([42.3709104, -72.5170028], 16);
+
+      L.control.layers({
+        "Roads": roads,
+        "Satellite": satellite,
+        "Terrain": terrain,
+        "Hybrid": hybrid
+      }).addTo(mymap);
 
       function getColor(d) {
         return d > 300 ? '#7a0177' :
@@ -16,9 +45,6 @@ demo = {
       }
 
       function style(feature) {
-        // TODO: search for electricity values by POST request
-        // with building name as param
-        
         return {
             // fillColor: getColor(feature.properties.electricity),
             weight: 0,
@@ -31,14 +57,15 @@ demo = {
 
       var customIcon = L.icon({
         iconUrl: 'https://ceed.ucdavis.edu/modules/campusHome/img/map/classroom-marker.svg',
-        iconAnchor: [5, 5],
+        iconAnchor: [7, 7],
         iconSize: [15, 15]
       });
 
       function onEachFeature(feature, layer) {
         if (feature.properties && feature.properties.marker) {
-          L.marker(feature.properties.marker, {icon: customIcon}).
-            bindPopup("<b>" + feature.properties.name + "</b><br>Curr Avg: " 
+          var marker = L.marker(feature.properties.marker, {icon: customIcon});
+
+          marker.bindPopup("<b>" + feature.properties.name + "</b><br>Previous day total: " 
             + feature.properties.electricity + " kWh<br><a href='/energy_data?bld=' class='.popupLink'>View energy usage by hour</a>").
             addTo(mymap);
 
@@ -51,11 +78,6 @@ demo = {
           }).addTo(mymap);
         }
       }
-
-      var roads = L.gridLayer.googleMutant({
-        type: 'roadmap', // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
-        attribution: '&copy; 2017 AC Office of Environmental Sustainability'
-      }).addTo(mymap);
 
       L.geoJson(housingData, {
         style: style,
@@ -138,7 +160,7 @@ demo = {
                         }
                     }]
                 }
-            }
+              }
             });
 
             $('.close').click(function() {

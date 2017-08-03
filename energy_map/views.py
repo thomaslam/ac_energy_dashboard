@@ -43,3 +43,6 @@ def get_energy_data(request):
 		'time_data': time_data,
 		'energy_data': energy_data
 		})
+
+def feedback(request):
+	return render(request, 'energy_map/feedback.html', {})

@@ -37,13 +37,6 @@
 
                                 
         <div id="mapid"></div>
-        <div class="footer">
-            <hr>
-            <div class="stats">
-                <i class="fa fa-clock-o"></i>
-                Data updated 12 hours ago
-            </div>
-        </div>
 
         <!-- Overlay pops up when click on map marker -->
         <div id="overlay">
@@ -61,5 +54,13 @@
 </body>
 
 {% include 'energy_map/partials/scripts.html' %}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        // main object from main.js
+        // housingData object from housing-data.js
+        main.init(housingData);
+    });
+</script>
 
 </html>

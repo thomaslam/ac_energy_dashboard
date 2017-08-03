@@ -13,6 +13,38 @@
     }
 }
 
+legend {
+    font-size:35px;
+    font-weight: bold;
+    border-bottom: 0;
+}
+
+.well {
+    background-color: white;
+    border-radius: 10px;
+}
+
+.center-page {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    transform: translateY(-50%) translateX(-50%);
+}
+
+.horizontal-center {
+    margin: 0 auto;
+}
+
+.container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    position: relative;
+    height: 100%;
+}
+
 .all-icons [class*="pe-"]{
     font-size: 40px;
 }
