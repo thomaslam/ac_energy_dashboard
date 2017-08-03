@@ -1,6 +1,3 @@
-type = ['','info','success','warning','danger'];
-myUrl = "http://148.85.253.152:15675"    	
-
 main = {
     init: function(housingData) {
       var roads = L.gridLayer.googleMutant({

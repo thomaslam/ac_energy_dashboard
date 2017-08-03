@@ -38,9 +38,12 @@
     $(document).ready(function(){
         {% if page_type == "energy_map" %} 
             main.init(housingData);
-        {% elif page_type == "contact" %}
+        {% elif page_type == "feedback" %}
             $('ul.nav li').removeClass('active');
             $('ul.nav li:eq(1)').addClass('active');
+        {% elif page_type == "contact" %}
+            $('ul.nav li').removeClass('active');
+            $('ul.nav li:eq(2)').addClass('active');
         {% endif %}
     });
 </script>
