@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -36,8 +37,10 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+        var staticFolder = "{% static img %}";
+
         {% if page_type == "energy_map" %} 
-            main.init(housingData);
+            main.init(housingData, staticFolder);
         {% elif page_type == "feedback" %}
             $('ul.nav li').removeClass('active');
             $('ul.nav li:eq(1)').addClass('active');
