@@ -5,6 +5,14 @@ function getLayer(type) {
   })
 }
 
+function getCustomIcon(iconUrl) {
+  return L.icon({
+    iconUrl: iconUrl,
+    iconAnchor: [7, 7],
+    iconSize: [15, 15]
+  });
+}
+
 function initChart(canvasID, data) {
   return new Chart(canvasID, {
           type: 'line',
@@ -89,37 +97,27 @@ main = {
                           '#feebe2';
       }
 
-      function style(feature) {
-        return {
-            weight: 0,
-            opacity: 0,
-            color: 'white'
-        };
+      function switchCoordinates(c) {
+        var temp = c[0];
+        c[0] = c[1];
+        c[1] = temp;
+        return c;
       }
 
-      // https://ceed.ucdavis.edu/modules/campusHome/img/map/classroom-marker.svg
-      var customIcon = L.icon({
-        iconUrl: staticFolder + "img/marker.svg",
-        iconAnchor: [7, 7],
-        iconSize: [15, 15]
-      });
-
       function onEachFeature(feature, layer) {
-        if (feature.properties && feature.properties.marker) {
-          
-
-          L.circle(feature.properties.marker, {
-            radius: 50,
-            // opacity: 10,
-            fillOpacity: 0.7,
-            fillColor: getColor(feature.properties.electricity),
-            weight: 0
-          }).addTo(mymap);
-        }
+        L.circle(switchCoordinates(feature.geometry.coordinates), {
+          radius: feature.properties.electricity,
+          // opacity: 10,
+          fillOpacity: 0.7,
+          fillColor: getColor(feature.properties.electricity),
+          weight: 0
+        }).addTo(mymap);
       }
 
       function pointToLayer(feature, latlng) {
-        var marker = L.marker(latlng, {icon: customIcon});
+        var marker = L.marker(latlng, {
+          icon: getCustomIcon(staticFolder + "img/marker.svg")
+        });
 
         marker.bindPopup("<b>" + feature.properties.name + "</b><br>Previous day total: " 
           + feature.properties.electricity + " kWh<br><a href='#'>View energy usage by hour</a>").
@@ -131,7 +129,6 @@ main = {
       }
 
       L.geoJson(housingData, {
-        // style: style,
         onEachFeature: onEachFeature,
         pointToLayer: pointToLayer
       }).addTo(mymap);
@@ -177,7 +174,8 @@ main = {
           }});
         };
       });
-      
+
+      ////////////////// Legend ////////////////////////
       var legend = L.control({position: 'bottomright'});
 
       legend.onAdd = function (map) {
@@ -187,7 +185,7 @@ main = {
           labels = [];
 
         // loop through our density intervals and generate a label with a colored square for each interval
-        div.innerHTML = ''
+        div.innerHTML = 'Total kWH previous day<br>'
         for (var i = 0; i < grades.length; i++) {
           div.innerHTML +=
           '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
@@ -197,6 +195,15 @@ main = {
       };
 
       legend.addTo(mymap);
+      ////////////////////////////////////////////////
+    },
+
+    feedback: function(housingData, staticFolder) {
+      var legend = L.control({position: 'bottomright'});
+
+      legend.onAdd = function(map) {
+
+      }
     }
 }
 

@@ -45,6 +45,10 @@ legend {
     height: 100%;
 }
 
+.leaflet-popup-content-wrapper {
+    border-radius: 0px;
+}
+
 .all-icons [class*="pe-"]{
     font-size: 40px;
 }
