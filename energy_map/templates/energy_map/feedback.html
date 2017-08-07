@@ -1,6 +1,24 @@
 {% extends 'energy_map/_base.html' %}
 {% block content %}
 	<div class="main-panel">
-		<div class="mapid"></div>
+		<div id="mapid"></div>
+
+		<div id="feedbackview-overlay">
+            <h4 id="feedbackview-overlay-text">
+            </h4>
+
+            <button type="button" class="close" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div id="feedbackform-overlay">
+            <h4 id="feedbackform-overlay-text">
+            </h4>
+
+            <button type="button" class="close" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
 	</div>
 {% endblock %}

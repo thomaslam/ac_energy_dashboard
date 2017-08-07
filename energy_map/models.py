@@ -32,6 +32,7 @@ class Feedback(models.Model):
 		# default=NORMAL
 	)
 	text = models.CharField(max_length=500)
+	vote = models.IntegerField(default=0)
 
 	def __str__(self):
 		return self.temp

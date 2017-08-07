@@ -81,7 +81,7 @@ legend {
     height: 100%; 
 }
 
-#overlay {
+#overlay, #feedbackview-overlay, #feedbackform-overlay {
     width:80%;
     margin:0 auto;
     background:white;
@@ -92,13 +92,9 @@ legend {
     left:10%;
     z-index:1000;
     display: none;
-    /*-webkit-border-radius:10px;*/
-    /*-moz-border-radius:10px;*/
-    /*-o-border-radius:10px;*/
-    /*border-radius:10px;*/
 }
 
-#overlay-text {
+#overlay-text, #feedbackview-overlay-text, #feedbackform-overlay-text {
     text-align: center;
     font-weight: bold;
 }

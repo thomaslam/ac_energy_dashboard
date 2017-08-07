@@ -106,8 +106,7 @@ main = {
 
       function onEachFeature(feature, layer) {
         L.circle(switchCoordinates(feature.geometry.coordinates), {
-          radius: feature.properties.electricity,
-          // opacity: 10,
+          radius: feature.properties.electricity, // change this to sth more dynamic
           fillOpacity: 0.7,
           fillColor: getColor(feature.properties.electricity),
           weight: 0
@@ -119,8 +118,8 @@ main = {
           icon: getCustomIcon(staticFolder + "img/marker.svg")
         });
 
-        marker.bindPopup("<b>" + feature.properties.name + "</b><br>Previous day total: " 
-          + feature.properties.electricity + " kWh<br><a href='#'>View energy usage by hour</a>").
+        marker.bindPopup("<b id='bldName'>" + feature.properties.name + "</b><br>Previous day total: " 
+          + feature.properties.electricity + " kWh<br><a id='viewEnergyLink' href='#'>View energy usage by hour</a>").
               on('click', function(e) {
                 mymap.setView(e.target.getLatLng(), 16);
               });
@@ -134,23 +133,23 @@ main = {
       }).addTo(mymap);
 
       mymap.on('popupopen', function(e) {
-        var marker = e.popup._source;
+        var marker = e.popup._contentNode;
 
-        var aLink = marker._popup._contentNode.childNodes[4];
-        var bldName = marker._popup._contentNode.childNodes[0].textContent;
+        var aLink = marker.querySelector("#viewEnergyLink");
+        var bldName = marker.querySelector("#bldName").textContent;
         console.log("Clicked on bldName: " + bldName);
 
         aLink.onclick = function(e) {
           e.preventDefault();
 
-          console.log('Clicked inside popup');
+          console.log('Inside viewEnergyLink onclick');
 
           // Show overlay element 
           $.ajax({url: '/energy_data?bld=' + bldName, success: function(data, status) {
             var overlay = $('#overlay');
             overlay.show();
 
-            $('#overlay-text').text(bldName+ " energy usage for past 24 hours")
+            $('#overlay-text').text(bldName+ " energy usage for past 24 hours");
 
             console.log(data['energy_data']);
 
@@ -199,11 +198,69 @@ main = {
     },
 
     feedback: function(housingData, staticFolder) {
-      var legend = L.control({position: 'bottomright'});
+      function pointToLayer(feature, latlng) {
+        var marker = L.marker(latlng, {
+          icon: getCustomIcon(staticFolder + "img/marker.svg")
+        });
 
-      legend.onAdd = function(map) {
+        marker.bindPopup("<b id='bldName'>" + feature.properties.name + "</b><br>" +
+          "cold<br>chilly<br>normal<br>warm<br>hot<br>" +
+          "<a id='viewFeedbackLink' href='#'>View feedbacks</a><br>" +
+          "<a id='leaveFeedbackLink' href='#'>Leave feedback</a>").
+              on('click', function(e) {
+                mymap.setView(e.target.getLatLng(), 16);
+              });
 
+        return marker;
       }
+
+      L.geoJson(housingData, {
+        pointToLayer: pointToLayer
+      }).addTo(mymap);
+
+      mymap.on('popupopen', function(e) {
+        var marker = e.popup._contentNode;
+
+        var viewFeedbackLink = marker.querySelector("#viewFeedbackLink");
+        var leaveFeedbackLink = marker.querySelector("#leaveFeedbackLink");
+        var bldName = marker.querySelector("#bldName").textContent;
+        console.log("Clicked on bldName: " + bldName);
+
+        viewFeedbackLink.onclick = function(e) {
+          e.preventDefault();
+          console.log("Inside viewFeedbackLink onclick");
+
+          $.ajax({url: '/view_feedbacks?bld=' + bldName, success: function(data, status) {
+            var overlay = $('#feedbackview-overlay');
+            overlay.show();
+
+            $('#feedbackview-overlay-text').text("Feedback for " + bldName);
+
+            // Make background darker
+            $('#mapid').css('opacity', 0.5);
+            $('.main-panel').css('background-color', 'black');
+
+            $('.close').click(function() {
+              overlay.hide();
+
+              // Make background normal
+              $('#mapid').css('opacity', 1);
+              $('.main-panel').css('background-color', '');
+            });
+          }});
+        }
+
+        leaveFeedbackLink.onclick = function(e) {
+          e.preventDefault();
+          console.log("Inside leaveFeedbackLink onclick");
+        }
+      });
+
+      // var legend = L.control({position: 'bottomright'});
+
+      // legend.onAdd = function(map) {
+
+      // }
     }
 }
 

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.conf import settings
+from .models import Building, Feedback
 import json, csv, os
 
 def index(request):
@@ -15,6 +16,14 @@ def index(request):
 		'energy_type': energy_type
 	}
 	return render(request, 'energy_map/index.html', context)
+
+def contact(request):
+	context = { 'page_type': 'contact' }
+	return render(request, 'energy_map/contact.html', context)
+
+def feedback(request):
+	context = { 'page_type': 'feedback'}
+	return render(request, 'energy_map/feedback.html', context)
 
 def get_energy_data(request):
 	# Process corresponding CSV files to bld_name 
@@ -44,10 +53,11 @@ def get_energy_data(request):
 		'energy_data': energy_data
 		})
 
-def contact(request):
-	context = { 'page_type': 'contact' }
-	return render(request, 'energy_map/contact.html', context)
+def view_feedbacks(request):
+	bld_name = request.GET.get('bld')
+	print(bld_name)
 
-def feedback(request):
-	context = { 'page_type': 'feedback'}
-	return render(request, 'energy_map/feedback.html', context)
+	return JsonResponse({});
+
+def leave_feedback(request):
+	return JsonResponse({})
