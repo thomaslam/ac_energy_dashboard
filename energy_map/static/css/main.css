@@ -82,14 +82,15 @@ legend {
 }
 
 #overlay, #feedbackview-overlay, #feedbackform-overlay {
-    width:80%;
+    width:90%;
+    height:80%;
+    top:10%;
+    left:5%;
     margin:0 auto;
     background:white;
     color:black;
     padding:10px;
     position:absolute;
-    top:20%;
-    left:10%;
     z-index:1000;
     display: none;
 }
@@ -97,6 +98,18 @@ legend {
 #overlay-text, #feedbackview-overlay-text, #feedbackform-overlay-text {
     text-align: center;
     font-weight: bold;
+}
+
+#fbv-doughnut-container {
+    width: 50%;
+    margin: 0 auto;
+}
+
+#doughnut-inner {
+    margin-top: -50%;
+    margin-bottom: 50%;
+    text-align: center;
+    font-size: 25px;
 }
 
 .close {

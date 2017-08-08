@@ -1,109 +1,8 @@
-function getLayer(type) {
-  return L.gridLayer.googleMutant({
-    'type': type, // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
-    attribution: '&copy; 2017 AC Office of Environmental Sustainability'
-  })
-}
-
-function getCustomIcon(iconUrl) {
-  return L.icon({
-    iconUrl: iconUrl,
-    iconAnchor: [7, 7],
-    iconSize: [15, 15]
-  });
-}
-
-function initChart(canvasID, data) {
-  return new Chart(canvasID, {
-          type: 'line',
-          data: {
-            labels: data['time_data'],
-            datasets: [{
-              data: data['energy_data'],
-              fill: false,
-              backgroundColor: '#614488',
-              borderColor: '#614488',
-              borderWidth: 3,
-              pointStyle: 'circle',
-              tension: 0.25
-            }]
-          },
-          options: {
-            responsive: true,
-            legend: {
-              display: false
-            },
-            tooltips: {
-              mode: 'index',
-              intersect: false,
-            },
-            hover: {
-              mode: 'nearest',
-              intersect: true
-            },
-            scales: {
-              xAxes: [{
-                gridLines: {
-                  display: false
-                },
-                display: true,
-                scaleLabel: {
-                  display: true,
-                  labelString: 'Time'
-                },
-                ticks: {
-                  callback: function(value, index, values) {
-                    return '';
-                  }
-                }
-              }],
-              yAxes: [{
-                display: true,
-                scaleLabel: {
-                  display: true,
-                  labelString: 'kWh'
-                }
-              }]
-            }
-          }
-        });
-}
-
-var roads = getLayer('roadmap'),
-    satellite = getLayer('satellite'),
-    terrain = getLayer('terrain'),
-    hybrid = getLayer('hybrid');
-
-var mymap = L.map('mapid', {
-  layers: [satellite, terrain, hybrid, roads]
-}).setView([42.3709104, -72.5170028], 16);
-
-L.control.layers({
-  "Roads": roads,
-  "Satellite": satellite,
-  "Terrain": terrain,
-  "Hybrid": hybrid
-}).addTo(mymap);
+// See utilities.js for utility variables and functions used
+var mymap = window.mymap;
 
 main = {
     init: function(housingData, staticFolder) {
-      function getColor(d) {
-        return d > 300 ? '#7a0177' :
-               d > 200 ? '#ae017e' :
-               d > 100 ? '#dd3497' :
-               d > 80 ? '#f768a1' :
-               d > 50 ? '#fa9fb5' :
-               d > 20  ? '#fcc5c0' :
-                          '#feebe2';
-      }
-
-      function switchCoordinates(c) {
-        var temp = c[0];
-        c[0] = c[1];
-        c[1] = temp;
-        return c;
-      }
-
       function onEachFeature(feature, layer) {
         L.circle(switchCoordinates(feature.geometry.coordinates), {
           radius: feature.properties.electricity, // change this to sth more dynamic
@@ -121,7 +20,7 @@ main = {
         marker.bindPopup("<b id='bldName'>" + feature.properties.name + "</b><br>Previous day total: " 
           + feature.properties.electricity + " kWh<br><a id='viewEnergyLink' href='#'>View energy usage by hour</a>").
               on('click', function(e) {
-                mymap.setView(e.target.getLatLng(), 16);
+                mymap.setView(e.target.getLatLng(), mymap.getZoom());
               });
 
         return marker;
@@ -153,7 +52,7 @@ main = {
 
             console.log(data['energy_data']);
 
-            var myChart = initChart($('#myChart'), data);
+            var myChart = initLineChart($('#myChart'), data);
 
             // Make background darker
             $('#mapid').css('opacity', 0.5);
@@ -204,11 +103,10 @@ main = {
         });
 
         marker.bindPopup("<b id='bldName'>" + feature.properties.name + "</b><br>" +
-          "cold<br>chilly<br>normal<br>warm<br>hot<br>" +
           "<a id='viewFeedbackLink' href='#'>View feedbacks</a><br>" +
           "<a id='leaveFeedbackLink' href='#'>Leave feedback</a>").
               on('click', function(e) {
-                mymap.setView(e.target.getLatLng(), 16);
+                mymap.setView(e.target.getLatLng(), mymap.getZoom()); // 16
               });
 
         return marker;
@@ -236,6 +134,18 @@ main = {
 
             $('#feedbackview-overlay-text').text("Feedback for " + bldName);
 
+            var myChart = initDoughnutChart($('#myDoughnut'), data);
+
+            var fb_list = JSON.parse(data['feedbacks']);
+            console.log(fb_list);
+
+            for (var i = 0; i < fb_list.length; i++) {
+              var fb_obj = fb_list[i];
+              console.log(fb_obj);
+
+              $('#fbv-feedbacks').append('<p>' + fb_obj.fields.text + '</p>');
+            }
+
             // Make background darker
             $('#mapid').css('opacity', 0.5);
             $('.main-panel').css('background-color', 'black');
@@ -246,6 +156,10 @@ main = {
               // Make background normal
               $('#mapid').css('opacity', 1);
               $('.main-panel').css('background-color', '');
+
+              // Prevent hovering problem
+              $('#myDoughnut').remove();
+              $('#fbv-doughnut-container').append('<canvas id="myDoughnut"></canvas>');
             });
           }});
         }

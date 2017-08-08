@@ -12,13 +12,13 @@ class Building(models.Model):
 class Feedback(models.Model):
 	COLD = 'CO'
 	CHILLY = 'CH'
-	NORMAL = 'NO'
+	PERFECT = 'PE'
 	WARM = 'WA'
-	HOT = 'HOT'
+	HOT = 'HO'
 	TEMP_CHOICES = (
 		(COLD, 'Cold'),
 		(CHILLY, 'Chilly'),
-		(NORMAL, 'Normal'),
+		(PERFECT, 'Perfect'),
 		(WARM, 'Warm'),
 		(HOT, 'Hot'),
 	)
@@ -29,10 +29,9 @@ class Feedback(models.Model):
 	temp = models.CharField(
 		max_length=2, 
 		choices=TEMP_CHOICES
-		# default=NORMAL
 	)
 	text = models.CharField(max_length=500)
-	vote = models.IntegerField(default=0)
+	votes = models.IntegerField(default=0)
 
 	def __str__(self):
 		return self.temp
